@@ -1,0 +1,223 @@
+Manuel du pilote d'imprimante jet d'encre Epson 2 (ESC/P-R)
+
+Copyright (C) Seiko Epson Corporation 2005-2023.
+
+Veuillez visiter notre site Web pour les dernières informations.
+Veuillez consulter le lien suivant pour plus d'informations sur ce pilote :
+http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX
+
+Contenu
+1  Contrat de licence
+2  Historique des révisions
+3  Description du produit
+4  Installation et configuration de CUPS
+    4.1  Installation
+    4.2  Paramètres après installation
+5  Impression
+    5.1  Éléments à configurer
+    5.2  Détails des paramètres
+    5.3  Méthodes de configuration
+    5.4  Méthodes d'impression
+
+-------------------------------------------------------------------------------
+1  Contrat de licence
+-------------------------------------------------------------------------------
+Ce logiciel inclut des codes sources distribués sous la licence publique générale limitée GNU v2.1 (COPYING.LIB).
+Ce logiciel inclut également des codes objets distribués selon les conditions du CONTRAT DE LICENCE UTILISATEUR FINAL EPSON (COPYING.EPSON).
+Veuillez consulter les fichiers de licence pour plus de détails.
+
+-------------------------------------------------------------------------------
+2  Historique des révisions
+-------------------------------------------------------------------------------
+Voir ./NEWS.
+
+-------------------------------------------------------------------------------
+3  Description du produit
+-------------------------------------------------------------------------------
+Ce logiciel est un programme filtre utilisé avec le système d'impression UNIX commun (CUPS) sur la plateforme Linux.
+Il permet une impression de haute qualité avec les imprimantes jet d'encre couleur Seiko Epson.
+
+Ce produit ne peut être utilisé qu'avec des imprimantes compatibles avec le langage Epson ESC/P-R.
+
+Veuillez consulter le lien suivant pour la liste des imprimantes compatibles :
+http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX
+
+-------------------------------------------------------------------------------
+4  Installation et configuration de CUPS
+-------------------------------------------------------------------------------
+4.1  Installation
+   Choisissez la commande appropriée pour votre distribution et exécutez-la avec les privilèges root.
+   Remarque : Le nom du paquet peut varier selon la version utilisée.
+
+   Pour les distributions basées sur Redhat :
+   -----------------
+   # rpm -i epson-inkjet-printer-escpr2-1.2.xx-1.x86_64.rpm
+   -----------------
+
+   Pour les distributions basées sur Debian :
+   -----------------
+   # dpkg -i epson-inkjet-printer-escpr2_1.2.xx-1_amd64.deb
+   -----------------
+
+4.2  Paramètres après installation
+   CUPS doit être configuré pour permettre l'utilisation de ce logiciel.
+   Avant d'imprimer, assurez-vous d'effectuer les étapes suivantes.
+
+    4.2.1  Redémarrer CUPS
+         Redémarrez CUPS pour activer le filtre installé.
+         Exécutez la commande suivante avec les privilèges root.
+
+         Exemple : Avec Red Hat Linux
+         -----------------
+         # /etc/init.d/cups restart
+         -----------------
+         Avec Debian GNU/Linux
+         -----------------
+         # /etc/init.d/cupsys restart
+         -----------------
+
+    4.2.2  Ajouter une imprimante
+
+      Via la ligne de commande :
+         -----------------
+         # lpadmin -p [NOM_IMPRIMANTE] -v [URI_PÉRIPHÉRIQUE] -P [FICHIER_PPD] -E
+         -----------------
+
+         Options :
+            -p      Spécifie le nom de l'imprimante
+            -E      Active l'imprimante
+            -v      Spécifie le pilote et la connexion
+            -P      Spécifie le fichier de configuration (fichier PPD)
+
+         Exemple : Avec l'imprimante EP-879A
+         -----------------
+         # lpadmin -p ep879a -v usb:/EPSON/EP-879A -P /opt/epson-inkjet-printer-escpr2/ppds/EPSON/EPSON-EP-879A-epson-escpr2-en.ppd.gz -E
+         -----------------
+
+         Pour plus de détails sur lpadmin, voir lpadmin(8).
+
+      Via un navigateur :
+         CUPS propose une interface CGI pour la configuration via navigateur.
+         Pour ajouter une imprimante, suivez les étapes ci-dessous.
+
+         (1) Allumez l'imprimante et connectez-la au PC via USB.
+         (2) Accédez au serveur CUPS (Port : 631) via le navigateur.
+             Exemple : Si CUPS est sur localhost :
+                 -----------------
+                 http://localhost:631/
+                 -----------------
+         (3) Sélectionnez "Ajouter une imprimante"
+         (4) Entrez un nom d'imprimante dans "Nom", puis cliquez sur "Continuer"
+         (5) Dans "Périphérique", sélectionnez USB, puis cliquez sur "Continuer"
+             Exemple : Avec l'imprimante EP-879A, le modèle affiché sera :
+                 -----------------
+                 "EP-901A USB #1(EP-879A)"
+                 -----------------
+         (6) Dans "Modèle", sélectionnez "Pilote d'imprimante EPSON-ESC/P-R pour Linux"
+             Exemple :
+                 -----------------
+                 "EPSON EP-901A, Pilote d'imprimante EPSON-ESC/P-R pour Linux (en,en,ja,nl,fr,de,it,pt,es,ko,zh_CN,zh_TW)"
+                 -----------------
+         (6') Vous pouvez aussi spécifier directement le fichier PPD via "Parcourir"
+              Exemple :
+                  -----------------
+                  /opt/epson-inkjet-printer-escpr2/ppds/EPSON/EPSON-EP-879A-epson-escpr2-en.ppd.gz
+                  -----------------
+
+Cela termine l'ajout d'une imprimante pour ce logiciel.
+
+-------------------------------------------------------------------------------
+5  Impression
+-------------------------------------------------------------------------------
+5.1  Éléments à configurer
+
+   * Encre
+        Sélectionnez impression couleur ou monochrome.
+
+   * Taille du papier
+        Sélectionnez le format du papier.
+
+   * Qualité d'impression
+        Sélectionnez le type de média et la qualité d'impression.
+
+5.2  Détails des paramètres
+
+   * Encre
+      Nom de paramètre : Ink
+
+      Mot-clé  | Affichage navigateur | Explication
+      ---------+----------------------+----------------------------
+      COLOR    | Couleur              | Impression couleur
+      MONO     | Monochrome           | Impression monochrome
+
+   * Taille du papier
+      Nom de paramètre : PageSize ou media
+      Affichage navigateur : MediaSize
+
+   * Qualité d'impression
+      Nom de paramètre : Quality
+      Affichage navigateur : Quality
+
+   * Impression recto verso
+      Nom de paramètre : Duplex
+      Affichage navigateur : Duplex
+
+   * Source du papier
+      Nom de paramètre : InputSlot
+      Affichage navigateur : InputSlot
+
+   * Luminosité
+      Nom de paramètre : Brightness
+      Affichage navigateur : Brightness
+
+   * Contraste
+      Nom de paramètre : Contrast
+      Affichage navigateur : Contrast
+
+   * Saturation
+      Nom de paramètre : Saturation
+      Affichage navigateur : Saturation
+
+5.3  Méthodes de configuration
+
+   * Via commande :
+        Utilisez lpoptions. Voir lpoptions(1).
+
+        Exemple : Pour l'imprimante ep879a
+        -----------------
+        $ lpoptions -p ep879a -o ink=COLOR -o media=A4 -o quality=PLAIN_NORMAL
+        -----------------
+
+   * Via navigateur :
+        Sélectionnez "Configurer l'imprimante" dans la fenêtre de l'imprimante.
+
+   * Lors de l'impression :
+        Utilisez les options -o comme avec lpoptions. Voir lpr(1) et lp(1).
+
+5.4  Méthodes d'impression
+
+   Pour imprimer, utilisez les commandes lpr ou lp.
+
+   Formats pris en charge :
+   * Postscript
+   * PDF
+   * Texte
+   * Fichiers image
+
+   Exemple :
+      Impression par défaut :
+      -----------------
+      $ lpr -P NOM_IMPRIMANTE <fichier>
+      $ lp -d NOM_IMPRIMANTE <fichier>
+      -----------------
+
+      Avec ep879a, encre = MONO, media = Legal :
+      -----------------
+      $ lpr -P ep879a -o ink=MONO -o media=Legal <fichier>
+      $ lp -d ep879a -o ink=MONO -o media=Legal <fichier>
+      -----------------
+
+La méthode d'impression dépend de l'implémentation de CUPS.
+Pour plus de détails, consultez la documentation CUPS.
+
+***Fin du fichier

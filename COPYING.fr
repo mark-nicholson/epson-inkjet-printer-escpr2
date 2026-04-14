@@ -1,0 +1,3 @@
+Traduction en français du fichier COPYING:
+
+Please read out COPYING.LIB, COPYING.EPSON and Privacy Statement(http://download.ebz.epson.net/ps/linux/)
